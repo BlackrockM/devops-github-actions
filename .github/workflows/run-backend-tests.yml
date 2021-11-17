@@ -1,0 +1,33 @@
+name: Run Backend Tests
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        default: '12.14.1'
+        required: false
+        type: string
+      install_packages_command:
+        default: 'yarn install'
+        required: false
+        type: string
+      run_tests_command:
+        default: 'yarn test'
+        required: false
+        type: string
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    container: 'node:${{ inputs.node_version }}'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install packages
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: ${{ inputs.install_packages_command }}
+      - name: Run Tests
+        run: ${{ inputs.run_tests_command }}
