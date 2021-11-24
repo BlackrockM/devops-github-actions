@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       node_version:
-        default: '12.14.1'
+        default: '12.14.1-alpine'
         required: false
         type: string
       install_packages_command:
