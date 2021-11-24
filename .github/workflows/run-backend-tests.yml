@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       node_version:
-        default: '12.14.1'
+        default: '12.14.1-alpine'
         required: false
         type: string
       install_packages_command:
@@ -12,6 +12,18 @@ on:
         type: string
       run_tests_command:
         default: 'yarn test'
+        required: false
+        type: string
+      run_optional_command:
+        default: ''
+        required: false
+        type: string
+      install_git:
+        default: true
+        required: false
+        type: boolean
+      install_git_command:
+        default: 'apk add --no-cache git'
         required: false
         type: string
 jobs:
@@ -26,6 +38,12 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Run optional command(s)
+        if: ${{ inputs.run_optional_command }}
+        run: ${{ inputs.run_optional_command }}
+      - name: Install Git
+        if: ${{ inputs.install_git }}
+        run: ${{ inputs.install_git_command }}
       - name: Install packages
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_packages_command }}
