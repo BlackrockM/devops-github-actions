@@ -39,7 +39,7 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Run optional command(s)
-        if: ${{ inputs.run_optional_command }} != ''
+        if: ${{ inputs.run_optional_command }}
         run: ${{ inputs.run_optional_command }}
       - name: Install Git
         if: ${{ inputs.install_git }}
