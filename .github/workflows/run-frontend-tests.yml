@@ -34,8 +34,6 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     container: 'node:${{ inputs.node_version }}'
-    env:
-      CHROME_BIN: '/usr/bin/chromium-browser'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -71,3 +69,5 @@ jobs:
         run: ${{ inputs.install_packages_command }}
       - name: Run Tests
         run: ${{ inputs.run_tests_command }}
+        env:
+          CHROME_BIN: '/usr/bin/chromium-browser'
