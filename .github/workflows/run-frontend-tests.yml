@@ -1,4 +1,4 @@
-name: Run Backend Tests
+name: Run Frontend Tests
 on:
   workflow_call:
     inputs:
@@ -10,12 +10,16 @@ on:
         default: '12.14.1-alpine'
         required: false
         type: string
+      install_server_packages_command:
+        default: 'yarn --cwd server/ install --production'
+        required: false
+        type: string
       install_packages_command:
         default: 'yarn install'
         required: false
         type: string
       run_tests_command:
-        default: 'yarn test'
+        default: 'CHROME_BIN=/usr/bin/chromium-browser yarn test'
         required: false
         type: string
       run_optional_command:
@@ -46,14 +50,29 @@ jobs:
         if: ${{ inputs.install_git }}
         run: ${{ inputs.install_git_command }}
 #      - uses: actions/cache@v2
+#        id: yarn-server-cache
+#        with:
+#          path: 'server/node_modules'
+#          key: ${{ runner.os }}-cache-server-modules-${{ hashFiles('server/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-cache-server-modules-
+#      - uses: actions/cache@v2
 #        id: yarn-cache
 #        with:
-#          path: '**/node_modules'
-#          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+#          path: 'node_modules'
+#          key: ${{ runner.os }}-cache-modules-${{ hashFiles('yarn.lock') }}
 #          restore-keys: |
-#            ${{ runner.os }}-modules-
+#            ${{ runner.os }}-cache-modules-
+      - name: Install ChromeHeadless browser
+        run: |
+          apk add chromium
+      - name: Install server packages
+#        if: steps.yarn-server-cache.outputs.cache-hit != 'true'
+        run: ${{ inputs.install_server_packages_command }}
       - name: Install packages
 #        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_packages_command }}
       - name: Run Tests
         run: ${{ inputs.run_tests_command }}
+        env:
+          CHROME_BIN: '/usr/bin/chromium-browser'
