@@ -2,6 +2,10 @@ name: Run Backend Tests
 on:
   workflow_call:
     inputs:
+      check_draft_pull_request:
+        default: false
+        required: false
+        type: boolean
       node_version:
         default: '12.14.1-alpine'
         required: false
