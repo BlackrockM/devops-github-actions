@@ -40,15 +40,15 @@ jobs:
       - name: Install Git
         if: ${{ inputs.install_git }}
         run: ${{ inputs.install_git_command }}
-      - uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
+#      - uses: actions/cache@v2
+#        id: yarn-cache
+#        with:
+#          path: '**/node_modules'
+#          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-modules-
       - name: Install packages
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
+#        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_packages_command }}
       - name: Run Tests
         run: ${{ inputs.run_tests_command }}
