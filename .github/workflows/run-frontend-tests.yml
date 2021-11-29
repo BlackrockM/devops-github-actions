@@ -59,7 +59,9 @@ jobs:
 #          restore-keys: |
 #            ${{ runner.os }}-cache-modules-
       - name: Install ChromeHeadless browser
-        run: apk add chromium
+        run: |
+          apk add chromium
+          export CHROME_BIN=/usr/bin/chromium-browser
       - name: Install server packages
 #        if: steps.yarn-server-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_server_packages_command }}
