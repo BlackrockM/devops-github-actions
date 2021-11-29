@@ -2,6 +2,10 @@ name: Run Frontend Tests
 on:
   workflow_call:
     inputs:
+      check_draft_pull_request:
+        default: false
+        required: false
+        type: boolean
       node_version:
         default: '12.14.1-alpine'
         required: false
@@ -34,6 +38,7 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     container: 'node:${{ inputs.node_version }}'
+    if: ${{ !github.event.pull_request.draft }} || ${{ inputs.check_draft_pull_request }}
     steps:
       - uses: actions/checkout@v2
         with:
