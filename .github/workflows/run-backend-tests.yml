@@ -30,6 +30,7 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     container: 'node:${{ inputs.node_version }}'
+    if: ${{ !github.event.pull_request.draft || inputs.check_draft_pull_request }}
     steps:
       - uses: actions/checkout@v2
         with:
