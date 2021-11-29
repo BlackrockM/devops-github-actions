@@ -34,6 +34,8 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     container: 'node:${{ inputs.node_version }}'
+    env:
+      CHROME_BIN: '/usr/bin/chromium-browser'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -61,7 +63,6 @@ jobs:
       - name: Install ChromeHeadless browser
         run: |
           apk add chromium
-          export CHROME_BIN=/usr/bin/chromium-browser
       - name: Install server packages
 #        if: steps.yarn-server-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_server_packages_command }}
