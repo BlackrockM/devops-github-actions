@@ -1,0 +1,59 @@
+name: Run Backend Tests
+on:
+  workflow_call:
+    inputs:
+      check_draft_pull_request:
+        default: false
+        required: false
+        type: boolean
+      node_version:
+        default: '16.14.2-alpine'
+        required: false
+        type: string
+      install_packages_command:
+        default: 'yarn install'
+        required: false
+        type: string
+      run_tests_command:
+        default: 'yarn test'
+        required: false
+        type: string
+      run_optional_command:
+        default: ''
+        required: false
+        type: string
+      install_git:
+        default: true
+        required: false
+        type: boolean
+      install_git_command:
+        default: 'apk add --no-cache git'
+        required: false
+        type: string
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    container: 'node:${{ inputs.node_version }}'
+    if: ${{ !github.event.pull_request.draft || inputs.check_draft_pull_request }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Run optional command(s)
+        if: ${{ inputs.run_optional_command }}
+        run: ${{ inputs.run_optional_command }}
+      - name: Install Git
+        if: ${{ inputs.install_git }}
+        run: ${{ inputs.install_git_command }}
+#      - uses: actions/cache@v2
+#        id: yarn-cache
+#        with:
+#          path: '**/node_modules'
+#          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-modules-
+      - name: Install packages
+#        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: ${{ inputs.install_packages_command }}
+      - name: Run Tests
+        run: ${{ inputs.run_tests_command }}
