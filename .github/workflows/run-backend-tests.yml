@@ -11,7 +11,7 @@ on:
         required: false
         type: string
       checkout_persist_credentials:
-        default: true
+        default: false
         required: false
         type: boolean
       install_packages_command:
