@@ -10,6 +10,10 @@ on:
         default: '12.14.1-alpine'
         required: false
         type: string
+      checkout_persist_credentials:
+        default: true
+        required: false
+        type: boolean
       install_packages_command:
         default: 'yarn install'
         required: false
@@ -39,6 +43,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: ${{ inputs.checkout_persist_credentials }}
       - name: Run optional command(s)
         if: ${{ inputs.run_optional_command }}
         run: ${{ inputs.run_optional_command }}
