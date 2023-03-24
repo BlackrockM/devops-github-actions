@@ -7,7 +7,7 @@ on:
         required: false
         type: boolean
       node_version:
-        default: '12.14.1-alpine'
+        default: '16.17.1-alpine'
         required: false
         type: string
       checkout_persist_credentials:
@@ -15,11 +15,11 @@ on:
         required: false
         type: boolean
       install_packages_command:
-        default: 'yarn install'
+        default: 'npm ci'
         required: false
         type: string
       run_tests_command:
-        default: 'yarn test'
+        default: 'npm run test'
         required: false
         type: string
       run_optional_command:
@@ -40,7 +40,7 @@ jobs:
     container: 'node:${{ inputs.node_version }}'
     if: ${{ !github.event.pull_request.draft || inputs.check_draft_pull_request }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: ${{ inputs.checkout_persist_credentials }}
@@ -50,7 +50,7 @@ jobs:
       - name: Install Git
         if: ${{ inputs.install_git }}
         run: ${{ inputs.install_git_command }}
-#      - uses: actions/cache@v2
+#      - uses: actions/cache@v3
 #        id: yarn-cache
 #        with:
 #          path: '**/node_modules'
