@@ -7,6 +7,10 @@ on:
         default: '{{version}}'
         required: false
         type: string
+      tag_prefix:
+        default: ''
+        required: false
+        type: string
 
 jobs:
   bump-version:
@@ -27,6 +31,7 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         with:
           commit-message: ${{ inputs.commit_message }}
+          tag-prefix: ${{ inputs.tag_prefix }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'cat package.json'
