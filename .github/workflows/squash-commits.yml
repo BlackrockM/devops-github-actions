@@ -1,0 +1,62 @@
+name: Squash commits in branch
+
+# on:
+#   pull_request:
+#     branches: [ dev ]
+#     types: [ labeled ]
+
+on:
+  workflow_call:
+    inputs:
+      github_personal_token:
+        default: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+        required: true
+        type: string
+      github_token:
+        default: ${{ github.token }}
+        required: false
+        type: string
+      merge_base_branch: 
+        default: 'origin/master'
+        required: false
+        type: string
+      label_name:
+        default: 'squash'
+        required: false
+        type: string
+
+jobs:
+  squash-commits:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.label.name == inputs.label_name }}
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: '0'
+        persist-credentials: false
+    - name: Config author
+      run: |
+        git config --local user.name "${{ github.event.pull_request.user.login }}"
+        git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
+    - name: Reset history
+      run: |
+        git switch ${{ github.head_ref }}
+        git reset $(git merge-base ${{ inputs.merge_base_branch }} HEAD)
+        git status
+    - name: Make a commit 
+      run: |
+        git add -A
+        git commit -m "${{ github.event.pull_request.title }}"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ inputs.github_personal_token }}
+        branch: ${{ github.head_ref }}
+        force: true
+    - name: removelabel
+      uses: buildsville/add-remove-label@v2.0.0
+      with:
+        token: ${{ inputs.github_token }}
+        labels: ${{ inputs.label_name }}
+        type: remove
