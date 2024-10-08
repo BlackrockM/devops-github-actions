@@ -1,0 +1,44 @@
+name: 'Version Bump & Publish'
+
+on:
+  workflow_call:
+    inputs:
+      commit_message:
+        default: '{{version}}'
+        required: false
+        type: string
+      tag_prefix:
+        default: ''
+        required: false
+        type: string
+
+jobs:
+  bump-version:
+    name: 'Bump Version & pulish on master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v3'
+        with:
+          ref: ${{ github.ref }}
+      - name: 'cat package.json'
+        run: cat ./package.json
+      - name: 'Version Bump'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          commit-message: ${{ inputs.commit_message }}
+          tag-prefix: ${{ inputs.tag_prefix }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'cat package.json'
+        run: cat ./package.json
+      - name: 'publish version'
+        run: npm publish
+      - name: 'Output Step'
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+        run: echo "new tag $NEW_TAG"
