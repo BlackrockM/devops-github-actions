@@ -38,6 +38,8 @@ jobs:
         run: cat ./package.json
       - name: 'publish version'
         run: npm publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Output Step'
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
