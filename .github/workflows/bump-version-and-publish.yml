@@ -30,8 +30,6 @@ jobs:
           node-version: 20
           registry-url: 'https://npm.pkg.github.com'
           scope: '@blackrockm'
-      - name: 'debug'
-        run: cat ./.npmrc
       - name: 'cat package.json'
         run: cat ./package.json
       - name: 'Version Bump'
@@ -47,7 +45,7 @@ jobs:
       - name: 'publish version'
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: 'Output Step'
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
