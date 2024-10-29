@@ -53,7 +53,7 @@ jobs:
       - name: 'Setup node'
         uses: 'actions/setup-node@v4'
         with:
-          node-version: ${echo ${{inputs.node_version}}%%-*}
+          node-version: ${echo ${{ inputs.node_version }}%%-*}
           registry-url: 'https://npm.pkg.github.com'
           scope: '@blackrockm'
       - name: Run optional command(s)
