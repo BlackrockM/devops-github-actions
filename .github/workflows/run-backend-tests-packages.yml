@@ -62,6 +62,8 @@ jobs:
         run: ${{ inputs.install_git_command }}
       - name: Fix install packages problems
         run: chown $(whoami) .
+      - name: debug
+        run: ls && cat .npmrc && echo ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Install packages
         run: ${{ inputs.install_packages_command }}
         env:
