@@ -46,6 +46,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: ${{ inputs.checkout_persist_credentials }}
+      - name: 'Setup node'
+        uses: 'actions/setup-node@v4'
+        with:
+          node-version: 20
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@blackrockm'
       - name: Run optional command(s)
         if: ${{ inputs.run_optional_command }}
         run: ${{ inputs.run_optional_command }}
