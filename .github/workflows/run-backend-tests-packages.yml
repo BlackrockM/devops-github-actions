@@ -63,7 +63,7 @@ jobs:
       - name: Fix install packages problems
         run: chown $(whoami) .
       - name: debug
-        run: ls -lah && env
+        run: ls -lah && env && cat $NPM_CONFIG_USERCONFIG
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Install packages
