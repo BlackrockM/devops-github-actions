@@ -53,6 +53,7 @@ jobs:
           node-version: '20.17'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@blackrockm'
+          token: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Run optional command(s)
         if: ${{ inputs.run_optional_command }}
         run: ${{ inputs.run_optional_command }}
