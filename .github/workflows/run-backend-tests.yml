@@ -38,20 +38,12 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     container: 'node:${{ inputs.node_version }}'
-    permissions:
-      packages: read
     if: ${{ !github.event.pull_request.draft || inputs.check_draft_pull_request }}
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: ${{ inputs.checkout_persist_credentials }}
-      - name: 'Setup node'
-        uses: 'actions/setup-node@v4'
-        with:
-          node-version: ${{ inputs.node_version }}
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@blackrockm'
       - name: Run optional command(s)
         if: ${{ inputs.run_optional_command }}
         run: ${{ inputs.run_optional_command }}
@@ -70,7 +62,5 @@ jobs:
       - name: Install packages
 #        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_packages_command }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Tests
         run: ${{ inputs.run_tests_command }}
