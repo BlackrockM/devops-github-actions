@@ -49,13 +49,11 @@ jobs:
           persist-credentials: ${{ inputs.checkout_persist_credentials }}
       - name: 'Setup node'
         uses: 'actions/setup-node@v4'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.SuperSecret }}
         with:
           node-version: '20.17'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@blackrockm'
-          token: $${{ secrets.SuperSecret }}
+          token: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Run optional command(s)
         if: ${{ inputs.run_optional_command }}
         run: ${{ inputs.run_optional_command }}
@@ -66,8 +64,7 @@ jobs:
         run: chown $(whoami) .
       - name: debug
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.SuperSecret }}
-          NODE_FOO: ${{secrets.FOO}}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
         run: ls -lah && env | grep NODE && cat $NPM_CONFIG_USERCONFIG
       - name: Install packages
         run: ${{ inputs.install_packages_command }}
