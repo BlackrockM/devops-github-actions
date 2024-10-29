@@ -64,6 +64,8 @@ jobs:
         run: ${{ inputs.install_git_command }}
       - name: Fix install packages problems
         run: chown $(whoami) .
+      - name: Set npm token for private registry
+        run: npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
       - name: Install packages
         run: ${{ inputs.install_packages_command }}
         env:
