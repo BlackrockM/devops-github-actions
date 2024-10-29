@@ -1,6 +1,8 @@
 name: Run Backend Tests With Packages
 on:
   workflow_call:
+    secrets:
+      NODE_AUTH_TOKEN
     inputs:
       check_draft_pull_request:
         default: false
