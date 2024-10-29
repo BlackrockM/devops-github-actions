@@ -1,13 +1,16 @@
 name: Run Backend Tests With Packages
 on:
   workflow_call:
+    secrets:
+      NODE_AUTH_TOKEN:
+        required: true
     inputs:
       check_draft_pull_request:
         default: false
         required: false
         type: boolean
       node_version:
-        default: '20.17-alpine'
+        default: '20.17'
         required: false
         type: string
       checkout_persist_credentials:
@@ -37,7 +40,7 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    container: 'node:${{ inputs.node_version }}'
+    container: 'node:${{ inputs.node_version }}-alpine'
     permissions:
       contents: read
       packages: read
@@ -50,10 +53,9 @@ jobs:
       - name: 'Setup node'
         uses: 'actions/setup-node@v4'
         with:
-          node-version: '20.17'
+          node-version: ${{ inputs.node_version }}
           registry-url: 'https://npm.pkg.github.com'
           scope: '@blackrockm'
-          token: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Run optional command(s)
         if: ${{ inputs.run_optional_command }}
         run: ${{ inputs.run_optional_command }}
