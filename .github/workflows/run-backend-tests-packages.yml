@@ -64,6 +64,6 @@ jobs:
       - name: Install packages
         run: ${{ inputs.install_packages_command }}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Run Tests
         run: ${{ inputs.run_tests_command }}
