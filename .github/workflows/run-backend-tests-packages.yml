@@ -1,9 +1,7 @@
 name: Run Backend Tests With Packages
 on:
   workflow_call:
-    secrets:
-      NODE_AUTH_TOKEN:
-        required: false
+    secrets: inherit
     inputs:
       check_draft_pull_request:
         default: false
