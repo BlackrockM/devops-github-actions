@@ -38,6 +38,8 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     container: 'node:${{ inputs.node_version }}'
+    permissions:
+      packages: read
     if: ${{ !github.event.pull_request.draft || inputs.check_draft_pull_request }}
     steps:
       - uses: actions/checkout@v3
@@ -62,5 +64,7 @@ jobs:
       - name: Install packages
 #        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_packages_command }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Tests
         run: ${{ inputs.run_tests_command }}
