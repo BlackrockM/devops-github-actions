@@ -1,7 +1,9 @@
 name: Run Backend Tests With Packages
 on:
   workflow_call:
-    secrets: inherit
+    secrets:
+      NODE_AUTH_TOKEN:
+        required: true
     inputs:
       check_draft_pull_request:
         default: false
@@ -64,8 +66,6 @@ jobs:
       - name: Fix install packages problems
         run: chown $(whoami) .
       - name: debug
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
         run: ls -lah && env | grep NODE && cat $NPM_CONFIG_USERCONFIG
       - name: Install packages
         run: ${{ inputs.install_packages_command }}
