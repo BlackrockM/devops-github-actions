@@ -67,6 +67,7 @@ jobs:
       - name: debug
         env:
           NODE_AUTH_TOKEN: ${{ secrets.SuperSecret }}
+          NODE_FOO: ${{secrets.FOO}}
         run: ls -lah && env | grep NODE && cat $NPM_CONFIG_USERCONFIG
       - name: Install packages
         run: ${{ inputs.install_packages_command }}
