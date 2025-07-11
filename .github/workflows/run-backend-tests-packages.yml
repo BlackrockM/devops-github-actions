@@ -13,6 +13,10 @@ on:
         default: '20.17'
         required: false
         type: string
+      container_type:
+        default: '-alpine'
+        required: false
+        type: string
       checkout_persist_credentials:
         default: false
         required: false
@@ -40,7 +44,7 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    container: 'node:${{ inputs.node_version }}-alpine'
+    container: 'node:${{ inputs.node_version }}${{ inputs.container_type }}'
     permissions:
       contents: read
       packages: read
