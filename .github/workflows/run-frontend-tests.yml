@@ -1,6 +1,9 @@
 name: Run Frontend Tests
 on:
   workflow_call:
+    secrets:
+      NODE_AUTH_TOKEN:
+        required: true
     inputs:
       check_draft_pull_request:
         default: false
@@ -69,10 +72,15 @@ jobs:
       - name: Install server packages
 #        if: steps.yarn-server-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_server_packages_command }}
+        env:
+          NPM_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Install packages
 #        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: ${{ inputs.install_packages_command }}
+        env:
+          NPM_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
       - name: Run Tests
         run: ${{ inputs.run_tests_command }}
         env:
           CHROME_BIN: '/usr/bin/chromium-browser'
+          NPM_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
