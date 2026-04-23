@@ -83,3 +83,4 @@ jobs:
         run: ${{ inputs.run_tests_command }}
         env:
           CHROME_BIN: '/usr/bin/chromium-browser'
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
