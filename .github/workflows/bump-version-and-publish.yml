@@ -11,6 +11,10 @@ on:
         default: ''
         required: false
         type: string
+      npm_tag:
+        default: 'latest'
+        required: false
+        type: string
 
 jobs:
   bump-version:
@@ -44,9 +48,10 @@ jobs:
       - name: 'cat package.json'
         run: cat ./package.json
       - name: 'publish version'
-        run: npm publish
+        run: npm publish --tag "${NPM_TAG:-latest}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TAG: ${{ inputs.npm_tag }}
       - name: 'Output Step'
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
